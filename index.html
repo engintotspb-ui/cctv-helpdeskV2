@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>CCTV Helpdesk Dashboard</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+
+    body {
+      background: #f4f6f9;
+    }
+
+    .kpi-card {
+      border-radius: 16px;
+      color: white;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .title {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .number {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .table-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .badge {
+      font-size: 14px;
+    }
+
+    .menu-btn {
+
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      padding: 20px 24px;
+
+      border-radius: 24px;
+
+      min-width: 280px;
+
+      text-decoration: none;
+
+      color: white;
+
+      transition: 0.2s;
+
+      box-shadow:
+        0 8px 20px rgba(0,0,0,0.08);
+
+    }
+
+    .menu-btn:hover {
+
+      transform: translateY(-3px);
+
+      color: white;
+
+    }
+
+    .menu-danger {
+
+      background: linear-gradient(
+        135deg,
+        #dc3545,
+        #ff6b6b
+      );
+
+    }
+
+    .menu-success {
+
+      background: linear-gradient(
+        135deg,
+        #198754,
+        #43c07a
+      );
+
+    }
+
+    .menu-icon {
+      font-size: 38px;
+    }
+
+    .menu-title {
+      font-size: 22px;
+      font-weight: bold;
+      line-height: 1.2;
+    }
+
+    .menu-sub {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container-fluid p-3">
+
+  <!-- HEADER -->
+  <div class="mb-4">
+
+    <h3 class="mb-1 fw-bold">
+      CCTV Helpdesk Dashboard
+    </h3>
+
+    <div class="text-muted mb-4">
+      อบจ.สุพรรณบุรี • NT สุพรรณบุรี
+    </div>
+
+    <!-- MENU -->
+    <div class="d-flex gap-3 flex-wrap">
+
+      <!-- แจ้งเหตุ -->
+      <a
+        href="https://forms.gle/BYxj4KbVYziqJALL8"
+        target="_blank"
+        class="menu-btn menu-danger">
+
+        <div class="menu-icon">🚨</div>
+
+        <div>
+
+          <div class="menu-title">
+            แจ้งเหตุเสีย
+          </div>
+
+          <div class="menu-sub">
+            เปิดฟอร์มแจ้ง Incident
+          </div>
+
+        </div>
+
+      </a>
+
+      <!-- ปิดงาน -->
+      <a
+        href="https://forms.gle/1eE22eerHDcPf6rP8"
+        target="_blank"
+        class="menu-btn menu-success">
+
+        <div class="menu-icon">🔧</div>
+
+        <div>
+
+          <div class="menu-title">
+            ปิดงาน
+          </div>
+
+          <div class="menu-sub">
+            บันทึกผลการดำเนินการ
+          </div>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- KPI -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-6 col-md-2">
+      <div class="kpi-card bg-primary">
+        <div class="title">งานทั้งหมด</div>
+        <div class="number" id="total">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+      <div class="kpi-card bg-danger">
+        <div class="title">แจ้งใหม่</div>
+        <div class="number" id="new">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+      <div class="kpi-card bg-warning">
+        <div class="title">ดำเนินการ</div>
+        <div class="number" id="progress">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+      <div class="kpi-card bg-info">
+        <div class="title">ส่งต่องาน อบจ.</div>
+        <div class="number" id="forward">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+      <div class="kpi-card bg-secondary">
+        <div class="title">รออะไหล่</div>
+        <div class="number" id="wait">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+      <div class="kpi-card bg-success">
+        <div class="title">ปิดงาน</div>
+        <div class="number" id="done">0</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CHART -->
+  <div class="row mb-4">
+
+    <div class="col-12 col-lg-6">
+
+      <div class="table-card">
+
+        <h5 class="mb-3">
+          ปัญหาที่พบบ่อย
+        </h5>
+
+        <canvas id="issueChart"></canvas>
+
+      </div>
+
+    </div>
+
+    <div class="col-12 col-lg-6">
+
+      <div class="table-card">
+
+        <h5 class="mb-3">
+          รพสต.ที่เสียบ่อย
+        </h5>
+
+        <canvas id="unitChart"></canvas>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+
+      <h5 class="m-0">
+        รายการล่าสุด
+      </h5>
+
+      <select
+        class="form-select"
+        id="statusFilter"
+        style="max-width:250px;"
+        onchange="filterData()">
+
+        <option value="">ทั้งหมด</option>
+        <option value="แจ้งใหม่">แจ้งใหม่</option>
+        <option value="ดำเนินการ">ดำเนินการ</option>
+        <option value="ส่งต่องาน อบจ.">ส่งต่องาน อบจ.</option>
+        <option value="รออะไหล่">รออะไหล่</option>
+        <option value="ปิดงาน">ปิดงาน</option>
+
+      </select>
+
+    </div>
+
+    <div class="table-responsive">
+
+      <table class="table table-hover align-middle">
+
+        <thead class="table-light">
+
+          <tr>
+
+            <th>Ticket</th>
+            <th>รพสต.</th>
+            <th>อาการ</th>
+            <th>ผู้ดำเนินการ</th>
+            <th>ความเร่งด่วน</th>
+            <th>สถานะ</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="tbl"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">
+          รายละเอียด Ticket
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+
+      </div>
+
+      <div class="modal-body" id="detailBody"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxzr0ktwHLaCqgx5fWnLWc1JjyO7j4p008FvSG3VcxzBT2IcFN0IzfhYFMaqz4Wba6hmw/exec";
+
+let globalData = [];
+
+let issueChart;
+let unitChart;
+
+
+// ======================
+// FORMAT DATE
+// ======================
+
+function formatDate(dateStr) {
+
+  if (!dateStr || dateStr === "-")
+    return "-";
+
+  const d = new Date(dateStr);
+
+  return d.toLocaleDateString("th-TH");
+
+}
+
+
+// ======================
+// FORMAT TIME
+// ======================
+
+function formatTime(timeStr) {
+
+  if (!timeStr || timeStr === "-")
+    return "-";
+
+  const d = new Date(timeStr);
+
+  return d.toLocaleTimeString(
+    "th-TH",
+    {
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  );
+
+}
+
+
+// ======================
+// FILTER
+// ======================
+
+function filterData() {
+
+  const status =
+    document.getElementById("statusFilter").value;
+
+  if (!status) {
+
+    renderTable(globalData);
+
+    return;
+
+  }
+
+  const filtered =
+    globalData.filter(r => r.status === status);
+
+  renderTable(filtered);
+
+}
+
+
+// ======================
+// LOAD DATA
+// ======================
+
+async function loadDashboard() {
+
+  const res = await fetch(API_URL);
+
+  globalData = await res.json();
+
+  renderTable(globalData);
+
+  updateKPI(globalData);
+
+  renderIssueChart(globalData);
+
+  renderUnitChart(globalData);
+
+}
+
+
+// ======================
+// TABLE
+// ======================
+
+function renderTable(data) {
+
+  const tbody =
+    document.getElementById("tbl");
+
+  tbody.innerHTML = "";
+
+  data.slice(0, 20).forEach(r => {
+
+    let color = "secondary";
+
+    if (r.status === "แจ้งใหม่")
+      color = "danger";
+
+    if (r.status === "ดำเนินการ")
+      color = "warning";
+
+    if (r.status === "ส่งต่องาน อบจ.")
+      color = "info";
+
+    if (r.status === "รออะไหล่")
+      color = "secondary";
+
+    if (r.status === "ปิดงาน")
+      color = "success";
+
+    tbody.innerHTML += `
+
+      <tr>
+
+        <td>
+
+          <a
+            href="#"
+            onclick='showDetail(${JSON.stringify(r)})'>
+
+            ${r.ticket}
+
+          </a>
+
+        </td>
+
+        <td>${r.unit}</td>
+
+        <td>${r.issue}</td>
+
+        <td>${r.operator || "-"}</td>
+
+        <td>${r.priority}</td>
+
+        <td>
+
+          <span class="badge bg-${color}">
+            ${r.status}
+          </span>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  });
+
+}
+
+
+// ======================
+// DETAIL MODAL
+// ======================
+
+function showDetail(r) {
+
+  const body =
+    document.getElementById("detailBody");
+
+  body.innerHTML = `
+
+    <table class="table table-bordered align-middle">
+
+      <tr>
+        <th width="30%">Ticket ID</th>
+        <td>${r.ticket}</td>
+      </tr>
+
+      <tr>
+        <th>สถานะ</th>
+        <td>
+
+          <span class="badge bg-primary">
+            ${r.status}
+          </span>
+
+        </td>
+      </tr>
+
+      <tr>
+        <th>วันที่แจ้ง</th>
+        <td>${formatDate(r.date)}</td>
+      </tr>
+
+      <tr>
+        <th>เวลาแจ้ง</th>
+        <td>${formatTime(r.time)}</td>
+      </tr>
+
+      <tr>
+        <th>รพสต.</th>
+        <td>${r.unit}</td>
+      </tr>
+
+      <tr>
+        <th>อาการ</th>
+        <td>${r.issue}</td>
+      </tr>
+
+      <tr>
+        <th>กล้อง</th>
+        <td>${r.camera}</td>
+      </tr>
+
+      <tr>
+        <th>รายละเอียด</th>
+        <td>${r.detail}</td>
+      </tr>
+
+      <tr>
+        <th>ผู้ดำเนินการ</th>
+        <td>${r.operator || "-"}</td>
+      </tr>
+
+      <tr>
+        <th>วิธีแก้ไข</th>
+
+        <td class="text-success fw-bold">
+          ${r.fixMethod || "-"}
+        </td>
+      </tr>
+
+      <tr>
+        <th>วันที่เข้าดำเนินการ</th>
+        <td>${formatDate(r.workDate)}</td>
+      </tr>
+
+      <tr>
+        <th>ความเร่งด่วน</th>
+        <td>${r.priority}</td>
+      </tr>
+
+      <tr>
+
+        <th>รูปก่อนทำ</th>
+
+        <td>
+
+          ${r.image && r.image !== "-" ? `
+
+            <a
+              href="${r.image}"
+              target="_blank"
+              class="btn btn-primary">
+
+              📷 ดูรูปก่อนทำ
+
+            </a>
+
+          ` : "-"}
+
+        </td>
+
+      </tr>
+
+      <tr>
+
+        <th>รูปหลังทำ</th>
+
+        <td>
+
+          ${r.afterImage && r.afterImage !== "-" ? `
+
+            <a
+              href="${r.afterImage}"
+              target="_blank"
+              class="btn btn-success">
+
+              ✅ ดูรูปหลังทำ
+
+            </a>
+
+          ` : "-"}
+
+        </td>
+
+      </tr>
+
+    </table>
+
+  `;
+
+  const modal =
+    new bootstrap.Modal(
+      document.getElementById("detailModal")
+    );
+
+  modal.show();
+
+}
+
+
+// ======================
+// KPI
+// ======================
+
+function updateKPI(data) {
+
+  document.getElementById("total").innerText =
+    data.length;
+
+  document.getElementById("new").innerText =
+    data.filter(r => r.status === "แจ้งใหม่").length;
+
+  document.getElementById("progress").innerText =
+    data.filter(r => r.status === "ดำเนินการ").length;
+
+  document.getElementById("forward").innerText =
+    data.filter(r => r.status === "ส่งต่องาน อบจ.").length;
+
+  document.getElementById("wait").innerText =
+    data.filter(r => r.status === "รออะไหล่").length;
+
+  document.getElementById("done").innerText =
+    data.filter(r => r.status === "ปิดงาน").length;
+
+}
+
+
+// ======================
+// ISSUE CHART
+// ======================
+
+function renderIssueChart(data) {
+
+  const counts = {};
+
+  data.forEach(r => {
+
+    const issue =
+      r.issue || "ไม่ระบุ";
+
+    counts[issue] =
+      (counts[issue] || 0) + 1;
+
+  });
+
+  // เรียงมาก → น้อย
+  let sorted =
+    Object.entries(counts)
+      .sort((a, b) => b[1] - a[1]);
+
+  // Top 5
+  let top5 =
+    sorted.slice(0, 5);
+
+  // รวมอื่นๆ
+  let other =
+    sorted
+      .slice(5)
+      .reduce((sum, item) => sum + item[1], 0);
+
+  if (other > 0) {
+
+    top5.push(["อื่นๆ", other]);
+
+  }
+
+  const labels =
+    top5.map(x => x[0]);
+
+  const values =
+    top5.map(x => x[1]);
+
+  // ลบ chart เก่า
+  if (issueChart) {
+
+    issueChart.destroy();
+
+  }
+
+  const ctx =
+    document.getElementById("issueChart");
+
+  issueChart = new Chart(ctx, {
+
+    type: "doughnut",
+
+    data: {
+
+      labels: labels,
+
+      datasets: [{
+
+        data: values
+
+      }]
+
+    },
+
+    options: {
+
+      responsive: true,
+
+      cutout: "55%",
+
+      plugins: {
+
+        legend: {
+
+          position: "bottom"
+
+        }
+
+      }
+
+    }
+
+  });
+
+}
+// ======================
+// UNIT CHART
+// ======================
+
+function renderUnitChart(data) {
+
+  const counts = {};
+
+  data.forEach(r => {
+
+    let unit =
+      r.unit || "ไม่ระบุ";
+
+    // ตัดเลข + รพสต.
+    unit =
+      unit.replace(
+        /^\d+\s*รพ\.สต\./,
+        ""
+      );
+
+    counts[unit] =
+      (counts[unit] || 0) + 1;
+
+  });
+
+  // เรียงมาก → น้อย
+  const sorted =
+    Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10);
+
+  const labels =
+    sorted.map(x => x[0]);
+
+  const values =
+    sorted.map(x => x[1]);
+
+  // ลบ chart เก่า
+  if (unitChart) {
+
+    unitChart.destroy();
+
+  }
+
+  const ctx =
+    document.getElementById("unitChart");
+
+  unitChart = new Chart(ctx, {
+
+    type: "bar",
+
+    data: {
+
+      labels: labels,
+
+      datasets: [{
+
+        label: "จำนวนครั้ง",
+
+        data: values
+
+      }]
+
+    },
+
+    options: {
+
+      responsive: true,
+
+      indexAxis: "y",
+
+      scales: {
+
+        x: {
+
+          beginAtZero: true,
+
+          ticks: {
+
+            stepSize: 1,
+            precision: 0
+
+          }
+
+        }
+
+      },
+
+      plugins: {
+
+        legend: {
+
+          display: false
+
+        }
+
+      }
+
+    }
+
+  });
+
+}
+// ======================
+// START
+// ======================
+
+loadDashboard();
+
+setInterval(loadDashboard, 60000);
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>
