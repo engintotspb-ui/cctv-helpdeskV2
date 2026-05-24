@@ -852,17 +852,9 @@ function renderIssueChart(data) {
 
   // Top 5
   let top5 =
-    sorted.slice(0, 5);
+    sorted.slice(0, 10);
 
-  // รวมอื่นๆ
-  let other =
-    sorted
-      .slice(5)
-      .reduce((sum, item) => sum + item[1], 0);
 
-  if (other > 0) {
-
-    top5.push(["อื่นๆ", other]);
 
   }
 
