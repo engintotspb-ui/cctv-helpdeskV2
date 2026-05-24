@@ -55,7 +55,7 @@
 
       border-radius: 24px;
 
-      min-width: 280px;
+
 
       text-decoration: none;
 
@@ -95,6 +95,15 @@
       );
 
     }
+.menu-warning {
+
+  background: linear-gradient(
+    135deg,
+    #fd7e14,
+    #ffb347
+  );
+
+}
 
     .menu-icon {
       font-size: 38px;
@@ -132,55 +141,123 @@
     </div>
 
     <!-- MENU -->
-    <div class="d-flex gap-3 flex-wrap">
+   <!-- MENU -->
+<div class="row g-3 mb-4">
 
-      <!-- แจ้งเหตุ -->
-      <a
-        href="https://forms.gle/BYxj4KbVYziqJALL8"
-        target="_blank"
-        class="menu-btn menu-danger">
+  <!-- แจ้งเหตุ -->
+  <div class="col-12 col-md-6">
 
-        <div class="menu-icon">🚨</div>
+    <a
+      href="https://forms.gle/BYxj4KbVYziqJALL8"
+      target="_blank"
+      class="menu-btn menu-danger w-100">
 
-        <div>
+      <div class="menu-icon">
+        🚨
+      </div>
 
-          <div class="menu-title">
-            แจ้งเหตุเสีย
-          </div>
+      <div>
 
-          <div class="menu-sub">
-            เปิดฟอร์มแจ้ง Incident
-          </div>
-
+        <div class="menu-title">
+          แจ้งเหตุเสีย
         </div>
 
-      </a>
-
-      <!-- ปิดงาน -->
-      <a
-        href="https://forms.gle/1eE22eerHDcPf6rP8"
-        target="_blank"
-        class="menu-btn menu-success">
-
-        <div class="menu-icon">🔧</div>
-
-        <div>
-
-          <div class="menu-title">
-            ปิดงาน
-          </div>
-
-          <div class="menu-sub">
-            บันทึกผลการดำเนินการ
-          </div>
-
+        <div class="menu-sub">
+          เปิดฟอร์มแจ้ง Incident
         </div>
 
-      </a>
+      </div>
 
-    </div>
+    </a>
 
   </div>
+
+  <!-- รับงาน -->
+  <div class="col-12 col-md-6">
+
+    <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLSeKt-HqvZv0MnVnYEVXYL9piLxktHxvv3YUJ6t37tJ7m5jP2g/viewform?usp=dialog"
+      target="_blank"
+      class="menu-btn menu-warning w-100">
+
+      <div class="menu-icon">
+        🛠
+      </div>
+
+      <div>
+
+        <div class="menu-title">
+          รับงาน
+        </div>
+
+        <div class="menu-sub">
+          รับ Ticket เข้าดำเนินการ
+        </div>
+
+      </div>
+
+    </a>
+
+  </div>
+
+  <!-- ปิดงาน -->
+  <div class="col-12 col-md-6">
+
+    <a
+      href="https://forms.gle/1eE22eerHDcPf6rP8"
+      target="_blank"
+      class="menu-btn menu-success w-100">
+
+      <div class="menu-icon">
+        🔧
+      </div>
+
+      <div>
+
+        <div class="menu-title">
+          ปิดงาน
+        </div>
+
+        <div class="menu-sub">
+          บันทึกผลการดำเนินการ
+        </div>
+
+      </div>
+
+    </a>
+
+  </div>
+
+  <!-- รายงาน -->
+  <div class="col-12 col-md-6">
+
+    <a
+      href="report.html"
+      target="_blank"
+      class="menu-btn w-100"
+      style="background: linear-gradient(135deg,#6f42c1,#9b6dff);">
+
+      <div class="menu-icon">
+        📄
+      </div>
+
+      <div>
+
+        <div class="menu-title">
+          รายงาน
+        </div>
+
+        <div class="menu-sub">
+          สรุปรายงานระบบ CCTV
+        </div>
+
+      </div>
+
+    </a>
+
+  </div>
+
+</div>
 
   <!-- KPI -->
   <div class="row g-3 mb-4">
@@ -230,6 +307,30 @@
   </div>
 
   <!-- CHART -->
+
+<div class="row mb-4">
+
+  <div class="col-12">
+
+    <div class="table-card">
+
+      <h5 class="mb-3">
+        งาน CCTV และ MA
+      </h5>
+
+      <div style="height:180px;">
+
+  	<canvas id="typeChart"></canvas>
+
+	</div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
   <div class="row mb-4">
 
     <div class="col-12 col-lg-6">
@@ -261,6 +362,8 @@
     </div>
 
   </div>
+
+
 
   <!-- TABLE -->
   <div class="table-card">
@@ -355,6 +458,7 @@ let globalData = [];
 
 let issueChart;
 let unitChart;
+let typeChart;
 
 
 // ======================
@@ -437,6 +541,7 @@ async function loadDashboard() {
   renderIssueChart(globalData);
 
   renderUnitChart(globalData);
+    renderTypeChart(globalData);
 
 }
 
@@ -489,9 +594,29 @@ function renderTable(data) {
 
         <td>${r.unit}</td>
 
-        <td>${r.issue}</td>
+        <td>
 
-        <td>${r.operator || "-"}</td>
+  ${r.issue}
+
+  <br>
+
+  ${
+    r.jobType === "MA"
+
+    ? `<span class="badge bg-warning text-dark">MA</span>`
+
+    : `<span class="badge bg-primary">CCTV</span>`
+  }
+
+</td>
+
+        <td>
+  	${
+    	r.status === "ส่งต่องาน อบจ."
+      	? "-"
+      	: (r.operator || "-")
+  	}
+	</td>
 
         <td>${r.priority}</td>
 
@@ -555,7 +680,23 @@ function showDetail(r) {
         <th>รพสต.</th>
         <td>${r.unit}</td>
       </tr>
+<tr>
+  <th>ประเภทงาน</th>
 
+  <td>
+
+  ${
+    String(r.jobType)
+      .trim()
+      .toUpperCase() === "MA"
+
+    ? `<span class="badge bg-warning text-dark">MA</span>`
+
+    : `<span class="badge bg-primary">CCTV</span>`
+  }
+
+</td>
+</tr>
       <tr>
         <th>อาการ</th>
         <td>${r.issue}</td>
@@ -584,8 +725,13 @@ function showDetail(r) {
         </td>
       </tr>
 
+<tr>
+  <th>วันที่รับงาน</th>
+  <td>${formatDate(r.receiveDate)}</td>
+</tr>
+
       <tr>
-        <th>วันที่เข้าดำเนินการ</th>
+        <th>วันที่ปิดงาน</th>
         <td>${formatDate(r.workDate)}</td>
       </tr>
 
@@ -876,6 +1022,99 @@ function renderUnitChart(data) {
   });
 
 }
+
+// ======================
+// CCTV / MA CHART
+// ======================
+
+function renderTypeChart(data) {
+
+  const maCount =
+    data.filter(r =>
+
+      String(r.jobType)
+        .trim()
+        .toUpperCase() === "MA"
+
+    ).length;
+
+  const cctvCount =
+    data.length - maCount;
+
+  if (typeChart) {
+
+    typeChart.destroy();
+
+  }
+
+  const ctx =
+    document.getElementById("typeChart");
+
+  typeChart = new Chart(ctx, {
+
+    type: "bar",
+
+    data: {
+
+      labels: ["CCTV", "MA"],
+
+      datasets: [{
+
+        data: [
+          cctvCount,
+          maCount
+        ],
+
+        backgroundColor: [
+          "#0d6efd",
+          "#fd7e14"
+        ],
+
+        borderRadius: 10
+
+      }]
+
+    },
+
+    options: {
+
+      responsive: true,
+            maintainAspectRatio: false,
+
+      indexAxis: "y",
+
+      plugins: {
+
+        legend: {
+
+          display: false
+
+        }
+
+      },
+
+      scales: {
+
+        x: {
+
+          beginAtZero: true,
+
+          ticks: {
+
+            stepSize: 1
+
+          }
+
+        }
+
+      }
+
+    }
+
+  });
+
+}
+
 // ======================
 // START
 // ======================
