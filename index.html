@@ -14,100 +14,221 @@
   <style>
 
     body {
-      background: #f4f6f9;
-    }
+
+  background: #f8fafc;
+
+}
+
+.header-box {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 18px;
+
+}
+.header-logo {
+
+  width: 68px;
+
+  height: 68px;
+
+  object-fit: contain;
+
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 8px;
+
+  border: 1px solid #e2e8f0;
+
+  box-shadow:
+    0 4px 12px rgba(15,23,42,0.06);
+
+}
+
+.header-title h3 {
+
+  margin-bottom: 4px;
+
+}
 
     .kpi-card {
-      border-radius: 16px;
-      color: white;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
+
+  position: relative;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 22px;
+
+  box-shadow:
+  0 8px 24px rgba(15,23,42,0.07);
+
+  border: 1px solid #f1f5f9;
+
+  overflow: hidden;
+transition: all 0.2s ease;
+
+}
+
+.kpi-card::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  right: 0;
+
+  width: 6px;
+  height: 100%;
+
+  border-radius: 20px;
+
+}
+
+.kpi-card:hover {
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 12px 28px rgba(15,23,42,0.10);
+
+}
+
+.kpi-blue::after {
+  background: #3b82f6;
+}
+
+.kpi-red::after {
+  background: #ef4444;
+}
+
+.kpi-orange::after {
+  background: #f59e0b;
+}
+
+.kpi-cyan::after {
+  background: #06b6d4;
+}
+
+.kpi-gray::after {
+  background: #6b7280;
+}
+
+.kpi-green::after {
+  background: #10b981;
+}
+
 
     .title {
-      font-size: 14px;
-      opacity: 0.9;
-    }
+
+  font-size: 14px;
+
+  color: #64748b;
+
+  font-weight: 500;
+
+}
 
     .number {
-      font-size: 32px;
-      font-weight: bold;
-    }
+
+  font-size: 34px;
+
+  font-weight: 700;
+
+  color: #0f172a;
+
+}
 
     .table-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 20px;
+
+  border: 1px solid #eef2f7;
+
+  box-shadow:
+    0 8px 24px rgba(15,23,42,0.06);
+
+}
 
     .badge {
       font-size: 14px;
     }
 
-    .menu-btn {
+.menu-btn {
 
-      display: flex;
-      align-items: center;
-      gap: 16px;
+  display: flex;
 
-      padding: 20px 24px;
+  align-items: center;
 
-      border-radius: 24px;
+  gap: 16px;
 
+  padding: 18px 22px;
 
+  border-radius: 20px;
 
-      text-decoration: none;
+  min-width: 260px;
 
-      color: white;
+  text-decoration: none;
 
-      transition: 0.2s;
+  background: white;
 
-      box-shadow:
-        0 8px 20px rgba(0,0,0,0.08);
+  color: #0f172a;
 
-    }
+  border: 1.5px solid #cbd5e1;
 
-    .menu-btn:hover {
+  box-shadow:
+  0 8px 20px rgba(15,23,42,0.08);
 
-      transform: translateY(-3px);
+  transition: all 0.2s ease;
 
-      color: white;
+  position: relative;
 
-    }
-
-    .menu-danger {
-
-      background: linear-gradient(
-        135deg,
-        #dc3545,
-        #ff6b6b
-      );
-
-    }
-
-    .menu-success {
-
-      background: linear-gradient(
-        135deg,
-        #198754,
-        #43c07a
-      );
-
-    }
-.menu-warning {
-
-  background: linear-gradient(
-    135deg,
-    #fd7e14,
-    #ffb347
-  );
+  overflow: hidden;
 
 }
 
+.menu-btn:hover {
+
+  transform: translateY(-3px);
+
+  box-shadow:
+  0 14px 32px rgba(15,23,42,0.14);
+
+}
+    .menu-danger {
+  border-left: 5px solid #ef4444;
+}
+
+    .menu-success {
+  border-left: 5px solid #10b981;
+}
+
+.menu-dark {
+  border-left: 5px solid #334155;
+}
+
+.menu-warning {
+  border-left: 5px solid #f59e0b;
+}
     .menu-icon {
-      font-size: 38px;
-    }
+
+  font-size: 34px;
+
+  opacity: 0.9;
+
+}
 
     .menu-title {
       font-size: 22px;
@@ -129,16 +250,35 @@
 
 <div class="container-fluid p-3">
 
-  <!-- HEADER -->
-  <div class="mb-4">
+<div class="header-box">
+
+  <!-- TITLE -->
+  <div class="header-title">
 
     <h3 class="mb-1 fw-bold">
       CCTV Helpdesk Dashboard
     </h3>
 
-    <div class="text-muted mb-4">
+    <div class="text-muted">
       อบจ.สุพรรณบุรี • NT สุพรรณบุรี
     </div>
+
+  </div>
+
+  <!-- LOGOS -->
+  <div class="d-flex gap-2">
+
+    <img
+      src="logo-nt.png"
+      class="header-logo">
+
+    <img
+      src="logo-อบจ.png"
+      class="header-logo">
+
+  </div>
+
+</div>
 
     <!-- MENU -->
    <!-- MENU -->
@@ -232,10 +372,9 @@
   <div class="col-12 col-md-6">
 
     <a
-      href="report.html"
-      target="_blank"
-      class="menu-btn w-100"
-      style="background: linear-gradient(135deg,#6f42c1,#9b6dff);">
+  href="report.html"
+  target="_blank"
+  class="menu-btn menu-dark w-100">
 
       <div class="menu-icon">
         📄
@@ -263,42 +402,42 @@
   <div class="row g-3 mb-4">
 
     <div class="col-6 col-md-2">
-      <div class="kpi-card bg-primary">
+      <div class="kpi-card kpi-blue">
         <div class="title">งานทั้งหมด</div>
         <div class="number" id="total">0</div>
       </div>
     </div>
 
     <div class="col-6 col-md-2">
-      <div class="kpi-card bg-danger">
+      <div class="kpi-card kpi-red">
         <div class="title">แจ้งใหม่</div>
         <div class="number" id="new">0</div>
       </div>
     </div>
 
     <div class="col-6 col-md-2">
-      <div class="kpi-card bg-warning">
+      <div class="kpi-card kpi-orange">
         <div class="title">ดำเนินการ</div>
         <div class="number" id="progress">0</div>
       </div>
     </div>
 
     <div class="col-6 col-md-2">
-      <div class="kpi-card bg-info">
+      <div class="kpi-card kpi-cyan">
         <div class="title">ส่งต่องาน อบจ.</div>
         <div class="number" id="forward">0</div>
       </div>
     </div>
 
     <div class="col-6 col-md-2">
-      <div class="kpi-card bg-secondary">
+      <div class="kpi-card kpi-gray">
         <div class="title">รออะไหล่</div>
         <div class="number" id="wait">0</div>
       </div>
     </div>
 
     <div class="col-6 col-md-2">
-      <div class="kpi-card bg-success">
+      <div class="kpi-card kpi-green">
         <div class="title">ปิดงาน</div>
         <div class="number" id="done">0</div>
       </div>
@@ -618,7 +757,25 @@ function renderTable(data) {
   	}
 	</td>
 
-        <td>${r.priority}</td>
+        <td>
+
+  ${
+    r.priority === "สูง"
+
+    ? `<span class="badge bg-danger">สูง</span>`
+
+    : r.priority === "กลาง"
+
+    ? `<span class="badge bg-warning text-dark">กลาง</span>`
+
+    : r.priority === "ต่ำ"
+
+    ? `<span class="badge bg-secondary">ต่ำ</span>`
+
+    : r.priority
+  }
+
+</td>
 
         <td>
 
@@ -671,10 +828,6 @@ function showDetail(r) {
         <td>${formatDate(r.date)}</td>
       </tr>
 
-      <tr>
-        <th>เวลาแจ้ง</th>
-        <td>${formatTime(r.time)}</td>
-      </tr>
 
       <tr>
         <th>รพสต.</th>
@@ -737,7 +890,23 @@ function showDetail(r) {
 
       <tr>
         <th>ความเร่งด่วน</th>
-        <td>${r.priority}</td>
+        <td>${
+    r.priority === "สูง"
+
+    ? `<span class="badge bg-danger">สูง</span>`
+
+    : r.priority === "กลาง"
+
+    ? `<span class="badge bg-warning text-dark">กลาง</span>`
+
+    : r.priority === "ต่ำ"
+
+    ? `<span class="badge bg-secondary">ต่ำ</span>`
+
+    : r.priority
+  }
+
+</td>
       </tr>
 
       <tr>
